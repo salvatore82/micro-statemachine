@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_dmiWwIxXEemAQZ2TSoJndA" name="userstatemachine">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_dmq5oIxXEemAQZ2TSoJndA" name="StateMachine1">
+    <region xmi:type="uml:Region" xmi:id="_dmtV4IxXEemAQZ2TSoJndA" name="Region1">
+      <transition xmi:type="uml:Transition" xmi:id="_yPG9QIxXEemAQZ2TSoJndA" source="_oZgxIIxXEemAQZ2TSoJndA" target="_pjmlsIxXEemAQZ2TSoJndA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_h2bMsIxZEemAQZ2TSoJndA" source="_pjmlsIxXEemAQZ2TSoJndA" target="_X9A3kIxZEemAQZ2TSoJndA">
+        <trigger xmi:type="uml:Trigger" xmi:id="_hkmncIxaEemAQZ2TSoJndA" event="_dr14EIxYEemAQZ2TSoJndA"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_6nlHQIxbEemAQZ2TSoJndA" guard="_tpxI0IxiEemAQZ2TSoJndA" source="_X9A3kIxZEemAQZ2TSoJndA" target="_UC7AkIxZEemAQZ2TSoJndA">
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_tpxI0IxiEemAQZ2TSoJndA">
+          <specification xmi:type="uml:OpaqueExpression" xmi:id="_tpxI0YxiEemAQZ2TSoJndA">
+            <language>bean</language>
+            <body>validateGuard</body>
+          </specification>
+        </ownedRule>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_bWC50IxiEemAQZ2TSoJndA" source="_X9A3kIxZEemAQZ2TSoJndA" target="_1RbewIxXEemAQZ2TSoJndA"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_oZgxIIxXEemAQZ2TSoJndA"/>
+      <subvertex xmi:type="uml:State" xmi:id="_pjmlsIxXEemAQZ2TSoJndA" name="REGISTERED"/>
+      <subvertex xmi:type="uml:State" xmi:id="_1RbewIxXEemAQZ2TSoJndA" name="NOT_VALID"/>
+      <subvertex xmi:type="uml:State" xmi:id="_UC7AkIxZEemAQZ2TSoJndA" name="VALID"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_X9A3kIxZEemAQZ2TSoJndA" name="is_valid" kind="choice"/>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_ZW-JkIxYEemAQZ2TSoJndA" name="VALIDATE"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_dr14EIxYEemAQZ2TSoJndA" name="SignalEventE1" signal="_ZW-JkIxYEemAQZ2TSoJndA"/>
+</uml:Model>
