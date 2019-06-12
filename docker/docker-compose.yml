@@ -12,7 +12,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mongoadmin
       MONGO_INITDB_ROOT_PASSWORD: secret
 
-  myapp:
+  microstatemachine:
     build: .
     ports:
       - 8090:8080
