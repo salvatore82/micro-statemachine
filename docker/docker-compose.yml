@@ -4,9 +4,10 @@ services:
     
   mongo:
     image: mongo:4
-    restart: always
     ports:
       - 27017:27017
+    networks:
+      - microusernetwork
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoadmin
       MONGO_INITDB_ROOT_PASSWORD: secret
@@ -15,5 +16,11 @@ services:
     build: .
     ports:
       - 8090:8080
+    networks:
+      - microusernetwork
     depends_on:
       - mongo
+
+networks:
+  microusernetwork:
+    driver: bridge

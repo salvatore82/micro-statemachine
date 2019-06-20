@@ -1,4 +1,4 @@
-package it.sdeluca.microstatemachine;
+package it.sdeluca.microstatemachine.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
