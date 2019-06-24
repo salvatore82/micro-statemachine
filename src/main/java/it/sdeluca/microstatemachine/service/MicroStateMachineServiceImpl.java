@@ -9,12 +9,12 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 import org.apache.activemq.command.ActiveMQBytesMessage;
-import org.apache.activemq.command.ActiveMQObjectMessage;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.service.StateMachineService;
@@ -40,14 +40,17 @@ public class MicroStateMachineServiceImpl implements MicroStateMachineService {
 	private StateMachineService<String, String> service;
 	@Autowired
 	private ObjectMapper objectMapper;
+    @Autowired
+    private SimpMessagingTemplate template;
 	
 	@JmsListener(destination = "microuser.topic")
 	public void listenForCreatedUser(final Message message) throws JMSException, JsonParseException, JsonMappingException, IOException {
 		if (message instanceof ActiveMQBytesMessage) {
 			ActiveMQBytesMessage bytesMessage = (ActiveMQBytesMessage) message;
 			MicroUser microUser = objectMapper.readValue(new String(bytesMessage.getContent().data), MicroUser.class);
-			StateMachine<String, String> stateMachine1 = service.acquireStateMachine(microUser.getId().toString());
-			log.debug("State machine for user with id ".concat(microUser.getId().toString()).concat(" created with UUID ").concat(stateMachine1.getUuid().toString()));
+			StateMachine<String, String> stateMachine = service.acquireStateMachine(microUser.getId().toString());
+			log.debug("State machine for user with id ".concat(microUser.getId().toString()).concat(" created with UUID ").concat(stateMachine.getUuid().toString()));
+			template.convertAndSend("/topic/hello", stateMachine.getState().getId());
 		} else {
 			throw new JMSException("Failed reading message from topic");
 		}
@@ -61,6 +64,7 @@ public class MicroStateMachineServiceImpl implements MicroStateMachineService {
 			StateMachine<String, String> stateMachine = service.acquireStateMachine(microContentRepository.getId().toString());
 			org.springframework.messaging.Message<String> messageSM = MessageBuilder.withPayload("VALIDATE").setHeader("isFileValid", microContentRepository.getValid()).build();
 			stateMachine.sendEvent(messageSM);
+			template.convertAndSend("/topic/hello", stateMachine.getState().getId());
 		} else {
 			throw new JMSException("Failed reading message from topic");
 		}

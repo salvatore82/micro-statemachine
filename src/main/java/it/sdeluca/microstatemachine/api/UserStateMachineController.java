@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.service.StateMachineService;
@@ -24,12 +25,15 @@ public class UserStateMachineController {
 
 	@Autowired
 	private StateMachineService<String, String> service;
+    @Autowired
+    private SimpMessagingTemplate template;
 
 	@ApiOperation("Start state machine")
 	@PostMapping("/{userId}/start")
 	public UUID start(@PathVariable(value = "userId") String userId) throws Exception {
-		StateMachine<String, String> stateMachine1 = service.acquireStateMachine(userId);
-		return stateMachine1.getUuid();
+		StateMachine<String, String> stateMachine = service.acquireStateMachine(userId);
+		template.convertAndSend("/topic/hello", stateMachine.getState().getId());
+		return stateMachine.getUuid();
 	}
 
 	@ApiOperation("Validate step for state machine")
@@ -38,6 +42,7 @@ public class UserStateMachineController {
 		StateMachine<String, String> stateMachine = service.acquireStateMachine(userId);
 		Message<String> message = MessageBuilder.withPayload("VALIDATE").setHeader("isFileValid", isFileValid).build();
 		stateMachine.sendEvent(message);
+		template.convertAndSend("/topic/hello", stateMachine.getState().getId());
 	}
 
 }
